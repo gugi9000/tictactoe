@@ -52,7 +52,6 @@ def winner(board):
 	else:
 		return False
 
-
 				
 def available(board, piece, placement):
 	if placement < 0 or placement > 9:
@@ -62,7 +61,6 @@ def available(board, piece, placement):
 				return False
 		else:
 			return True
-
 
 
 move = ''
@@ -93,6 +91,5 @@ while move != 'q':
 			player = 'O'
 		else:
 			player = 'X'
-
 
 print('Bye..')
