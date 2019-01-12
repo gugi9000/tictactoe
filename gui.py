@@ -80,7 +80,7 @@ def main():
     background = background.convert()
 
     clock = pygame.time.Clock()
-    pygame.mouse.set_visible(True)
+    pygame.mouse.set_visible(False)
 
     marker_text = myfont.render(f"CHOSE YOUR MARKER", False, (0, 255, 0))
     
