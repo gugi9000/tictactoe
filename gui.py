@@ -6,6 +6,8 @@ WHITE = (255, 255, 255)
 BLUE =  ( 70,  70, 200)
 GREEN = (  0, 255,   0)
 RED =   (200,  30,  30)
+player_1 = ''
+player_2 = ''
 
 
 def draw_cross(screen, x, y):
@@ -30,6 +32,28 @@ def draw_board(screen):
     pygame.draw.line(screen, BLUE, [0, 200],[800, 200], 20)
     pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)
 
+def draw_cursor(screen, active, x, y):
+    pygame.draw.circle(screen, WHITE, [x, y], 10)
+
+def select_marker(mouse_x, mouse_y, first_start, font, screen):
+    if pygame.mouse.get_pressed()[0]:
+        if first_start == True:
+            # if mouse is within x region
+            if mouse_x >= 170 and mouse_x <= 330:
+                if mouse_y >= 170 and mouse_y <= 330:
+                    player_1 = 'X'
+                    player_2 = 'O'
+                    marker_text = font.render(f"Player_1 is {player_1}, Player_2 is {player_2}", False, (0, 255, 0))
+                    screen.blit(marker_text, (220, 40))
+            # if mouse is within o region
+            if mouse_x >= 470 and mouse_x <= 630:
+                if mouse_y >= 170 and mouse_y <= 330:
+                    player_1 = 'O'
+                    player_2 = 'X'
+                    marker_text = font.render(f"Player_1 is {player_1}, Player_2 is {player_2}", False, (0, 255, 0))
+                    screen.blit(marker_text, (220, 40))
+ 
+        # else game_board regions
 # define a main function
 def main():
      
@@ -71,11 +95,18 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
+        mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
+
         screen.fill(BLACK)
         if first_start == True:
-            screen.blit(marker_text, (200, 20))
-            draw_cross(screen, 250, 150)
-            draw_circle(screen, 550, 150)
+            screen.blit(marker_text, (220, 120))
+            select_marker(mouse_pos_x, mouse_pos_y, first_start, myfont, screen)
+            draw_cross(screen, 250, 250)
+            draw_circle(screen, 550, 250)
+            draw_cursor(screen, True, mouse_pos_x, mouse_pos_y)
+            
+            if player_1 != '' and player_2 != '':
+                first_start = False
         #draw_board(screen)
         mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
         #draw_cross(screen, mouse_pos_x, mouse_pos_y)
