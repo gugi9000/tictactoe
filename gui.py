@@ -22,7 +22,7 @@ def draw_cross(screen, x, y):
     pygame.draw.line(screen, GREEN, b, c, 20)
 
 def draw_circle(screen, x, y):
-    pygame.draw.circle(screen, RED, [x , y], 90, 20)
+    pygame.draw.circle(screen, RED, [x , y], 85, 14)
 
 def draw_board(screen):
     pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)
@@ -55,28 +55,14 @@ def main():
     background.fill(BLACK) 
     background = background.convert()
 
-    #pygame.draw.circle(screen, RED, [130 , 90], 90, 20)
-
-    #draw_cross(screen, 660, 90)
-    # image = pygame.image.load("logo32x32.png")
-
     clock = pygame.time.Clock()
-    pygame.mouse.set_visible(False)
-    # screen.blit(image, (50,50)) 
+    pygame.mouse.set_visible(True)
 
     marker_text = myfont.render(f"CHOSE YOUR MARKER", False, (0, 255, 0))
     
     running = True
     first_start = True
     while running:
-        # if xpos>screen_width-64 or xpos<0:
-        #     step_x = -step_x
-        # if ypos>screen_height-64 or ypos<0:
-        #     step_y = -step_y
-        # xpos += step_x
-        # ypos += step_y
-        
-        # screen.blit(image, (xpos, ypos))
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:
