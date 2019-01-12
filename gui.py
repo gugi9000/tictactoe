@@ -1,6 +1,27 @@
 import pygame
 from time import sleep
 
+BLACK = (  0,   0,   0)
+WHITE = (255, 255, 255)
+BLUE =  ( 70,  70, 200)
+GREEN = (  0, 255,   0)
+RED =   (200,  30,  30)
+
+
+def draw_cross(screen, x, y):
+    #  a    b
+    #    \/
+    #    /\
+    #  c   d
+    offset = 65
+    a = [x-offset,y-offset]
+    b = [x+offset,y-offset]
+    c = [x-offset,y+offset]
+    d = [x+offset,y+offset]
+    pygame.draw.line(screen, GREEN, a, d, 20)
+    pygame.draw.line(screen, GREEN, b, c, 20)
+
+
 # define a main function
 def main():
      
@@ -13,11 +34,7 @@ def main():
     
     screen_width = 800
     screen_height = 600
-    BLACK = (  0,   0,   0)
-    WHITE = (255, 255, 255)
-    BLUE =  ( 70,  70, 200)
-    GREEN = (  0, 255,   0)
-    RED =   (200,  30,  30)
+    
     xpos = 50
     ypos = 50
     step_x = 10
@@ -35,6 +52,8 @@ def main():
     pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)
 
     pygame.draw.circle(screen, RED, [130 , 90], 90, 10)
+
+    draw_cross(screen, 660, 90)
     # image = pygame.image.load("logo32x32.png")
 
     clock = pygame.time.Clock()
