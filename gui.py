@@ -23,35 +23,38 @@ position = (0, 0)
 player_1 = ''
 player_2 = ''
 
-
-def draw_cross(screen, x, y):
-    #  a    b
-    #    \/
-    #    /\
-    #  c   d
-    offset = 65
-    a = [x-offset,y-offset]
-    b = [x+offset,y-offset]
-    c = [x-offset,y+offset]
-    d = [x+offset,y+offset]
-    pygame.draw.line(screen, GREEN, a, d, 20)
-    pygame.draw.line(screen, GREEN, b, c, 20)
-
-def draw_circle(screen, x, y):
-    pygame.draw.circle(screen, RED, [x , y], 75, 14)
-
-def draw_board(screen):
-    pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)
-    pygame.draw.line(screen, BLUE, [534, 0],[534, 600], 20)
-    pygame.draw.line(screen, BLUE, [0, 200],[800, 200], 20)
-    pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)
-
-def draw_cursor(screen, active, x, y):
-    pygame.draw.circle(screen, WHITE, [x, y], 10)
-
+####################draw game components###########################
+def draw_cross(screen, x, y):                                     #
+    #  a    b                                                     #
+    #    \/                                                       #
+    #    /\                                                       #
+    #  c   d                                                      #
+    offset = 65                                                   #
+    a = [x-offset,y-offset]                                       #
+    b = [x+offset,y-offset]                                       #
+    c = [x-offset,y+offset]                                       #
+    d = [x+offset,y+offset]                                       #
+    pygame.draw.line(screen, GREEN, a, d, 20)                     #
+    pygame.draw.line(screen, GREEN, b, c, 20)                     #
+                                                                  #
+def draw_circle(screen, x, y):                                    #
+    pygame.draw.circle(screen, RED, [x , y], 75, 14)              #
+                                                                  #
+def draw_board(screen):                                           #
+    pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)       #
+    pygame.draw.line(screen, BLUE, [534, 0],[534, 600], 20)       #
+    pygame.draw.line(screen, BLUE, [0, 200],[800, 200], 20)       #
+    pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)       #
+                                                                  #
+def draw_cursor(screen, active, x, y):                            #
+    pygame.draw.circle(screen, WHITE, [x, y], 10)                 #
+###################################################################
 def draw_markers(screen, position):
     global spots_taken
     x, y = position
+    # loop the spots list and check if any of the spots are taken
+    # this function goes hand in hand with input_system due to
+    # spots_taken[board_position] = player (player being X or O) 
     for i in range(len(spots_taken)):
         if spots_taken[i] == 'X':  
             draw_cross(screen, x, y)
@@ -60,6 +63,7 @@ def draw_markers(screen, position):
 
 def input_system(mouse_x, mouse_y, first_start, player, screen):
     global player_1, player_2, marker_spots, position
+    # check if mouse1 is pressed
     if pygame.mouse.get_pressed()[0]:
         if first_start == True:
             # if mouse is within x region
@@ -124,6 +128,7 @@ def main():
     # create a font for text stuff in the program
     myfont = pygame.font.SysFont("Comic Sans MS", 30, 1)
     
+    # set screen size (x,y)
     screen_width = 800
     screen_height = 600
     
@@ -133,8 +138,11 @@ def main():
     step_y = 10
     FPS = 30
 
+    # create a main surface we can render stuff on
     screen = pygame.display.set_mode((screen_width,screen_height))
+    # get the size of our main surface and create a sub surface
     background = pygame.Surface(screen.get_size())
+    # set previous sub surface to color black and fill the whole surface
     background.fill(BLACK) 
     background = background.convert()
 
@@ -142,35 +150,51 @@ def main():
     pygame.mouse.set_visible(False)
 
     marker_text = myfont.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
-    
+
+    # cool variable we all love    
     running = True
     first_start = True
     turn = 'X'
+    # our game loop
     while running:
+        # check if any events are happening and if
+        # they are related to pressing the exit button
+        # in the top right or pressing the ESC key on your keyboard
         for event in pygame.event.get():
-            
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
 
+        # get mouse position (tuple unpacking)
         mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
-
+        # fill the screen with black
         screen.fill(BLACK)
         if first_start == True:
+            # render our starting screen text
             screen.blit(marker_text, (150, 120))
+            # call the input system to know what we chose
             input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
+            # draw the cross option
             draw_cross(screen, 250, 250)
+            # draw the circle option
             draw_circle(screen, 550, 250)
+            # draw the beautiful white ball cursor
             draw_cursor(screen, True, mouse_pos_x, mouse_pos_y)
-            
+            # chose a starting player at random
+            start_move = random.randint(0,1)
+            if start_move == 0:
+                turn = 'X'
+            elif start_move == 1:
+                turn = 'O'
+            # make sure everything was assigned correctly until we proceed to the actual game
             if player_1 != '' and player_2 != '':
                 first_start = False
                 sleep(0.5)
         else:
+            # draw our beautiful board
             draw_board(screen)
+            # draw the markers we set on screen
             draw_markers(screen, position)
+            # call the input system to know what the do
             input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
             # player_x's turn
             if turn == 'X':
@@ -182,5 +206,6 @@ def main():
             #print(milliseconds)
         pygame.display.flip()
     pygame.mouse.set_visible(True)
+
 if __name__=="__main__":
     main()
