@@ -116,7 +116,7 @@ def main():
     clock = pygame.time.Clock()
     pygame.mouse.set_visible(False)
 
-    marker_text = myfont.render(f"CHOSE YOUR MARKER", False, (0, 255, 0))
+    marker_text = myfont.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
     
     running = True
     first_start = True
@@ -134,7 +134,7 @@ def main():
 
         screen.fill(BLACK)
         if first_start == True:
-            screen.blit(marker_text, (220, 120))
+            screen.blit(marker_text, (160, 120))
             input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
             draw_cross(screen, 250, 250)
             draw_circle(screen, 550, 250)
