@@ -23,6 +23,11 @@ position = (0, 0)
 player_1 = ''
 player_2 = ''
 
+# set screen size (x,y)
+screen_width = 800
+screen_height = 600
+
+
 ####################draw game components###########################
 def draw_cross(screen, x, y):                                     #
     #  a    b                                                     #
@@ -114,7 +119,14 @@ def input_system(mouse_x, mouse_y, first_start, player, screen):
                 if mouse_y >= 420:
                     spots_taken[8] = player
                     position = board_pos["pos_9"]
-            
+
+def toggle_fullscreen(fullscreen):
+    if fullscreen:
+        screen = pygame.display.set_mode((screen_width,screen_height), pygame.RESIZABLE)
+    else:
+        screen = pygame.display.set_mode((screen_width,screen_height), pygame.FULLSCREEN)
+    return not fullscreen
+
 # define a main function
 def main():
      
@@ -127,12 +139,6 @@ def main():
     pygame.display.set_caption("super awesome tic-tac-toe")
     # create a font for text stuff in the program
     myfont = pygame.font.SysFont("Comic Sans MS", 30, 1)
-    
-    # set screen size (x,y)
-    screen_width = 800
-    screen_height = 600
-
-    fullscreen = False
         
     # create a main surface we can render stuff on
     screen = pygame.display.set_mode((screen_width,screen_height)) #, pygame.FULLSCREEN)
@@ -141,6 +147,7 @@ def main():
     # set previous sub surface to color black and fill the whole surface
     background.fill(BLACK) 
     background = background.convert()
+    fullscreen = False
 
     pygame.mouse.set_visible(False)
 
@@ -159,12 +166,7 @@ def main():
             if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
             if pygame.key.get_pressed()[pygame.K_F12]:
-                if fullscreen:
-                    fullscreen = False
-                    screen = pygame.display.set_mode((screen_width,screen_height), pygame.RESIZABLE)
-                else:
-                    fullscreen = True
-                    screen = pygame.display.set_mode((screen_width,screen_height), pygame.FULLSCREEN)
+                fullscreen = toggle_fullscreen(fullscreen)
 
         # get mouse position (tuple unpacking)
         mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
