@@ -38,7 +38,7 @@ def draw_cross(screen, x, y):
     pygame.draw.line(screen, GREEN, b, c, 20)
 
 def draw_circle(screen, x, y):
-    pygame.draw.circle(screen, RED, [x , y], 85, 14)
+    pygame.draw.circle(screen, RED, [x , y], 75, 14)
 
 def draw_board(screen):
     pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)
@@ -73,21 +73,44 @@ def input_system(mouse_x, mouse_y, first_start, player, screen):
                     player_1 = 'O'
                     player_2 = 'X'
         else:
-            # if mouse is within first box region
-            if mouse_x >= 0 and mouse_x <= 267:
+            # check if mouse is within any box region
+            if mouse_x <= 267:
                 if mouse_y <= 200:
                     spots_taken[0] = player
                     position = board_pos["pos_1"]
-            # if mouse is within second box region
             if mouse_x >= 287 and mouse_x <= 534:
                 if mouse_y <= 200:
                     spots_taken[1] = player
                     position = board_pos["pos_2"]
-            # if mouse is within third box region
             if mouse_x >= 554:
                 if mouse_y <= 200:
                     spots_taken[2] = player
                     position = board_pos["pos_3"]
+            if mouse_x <= 267:
+                if mouse_y >= 220 and mouse_y <= 400:
+                    spots_taken[3] = player
+                    position = board_pos["pos_4"]
+            if mouse_x >= 287 and mouse_x <= 534:
+                if mouse_y >= 220 and mouse_y <= 400:
+                    spots_taken[4] = player
+                    position = board_pos["pos_5"]
+            if mouse_x >= 554:
+                if mouse_y >= 220 and mouse_y <= 400:
+                    spots_taken[5] = player
+                    position = board_pos["pos_6"]
+            if mouse_x <= 267:
+                if mouse_y >= 420:
+                    spots_taken[6] = player
+                    position = board_pos["pos_7"]
+            if mouse_x >= 287 and mouse_x <= 534:
+                if mouse_y >= 420:
+                    spots_taken[7] = player
+                    position = board_pos["pos_8"]
+            if mouse_x >= 554:
+                if mouse_y >= 420:
+                    spots_taken[8] = player
+                    position = board_pos["pos_9"]
+            
 # define a main function
 def main():
      
@@ -96,8 +119,10 @@ def main():
     # load and set the logo
     logo = pygame.image.load("logo32x32.png")
     pygame.display.set_icon(logo)
+    # set window title
     pygame.display.set_caption("super awesome tic-tac-toe")
-    myfont = pygame.font.SysFont("Times New Roman", 30, 1)
+    # create a font for text stuff in the program
+    myfont = pygame.font.SysFont("Comic Sans MS", 30, 1)
     
     screen_width = 800
     screen_height = 600
@@ -134,7 +159,7 @@ def main():
 
         screen.fill(BLACK)
         if first_start == True:
-            screen.blit(marker_text, (160, 120))
+            screen.blit(marker_text, (150, 120))
             input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
             draw_cross(screen, 250, 250)
             draw_circle(screen, 550, 250)
@@ -142,6 +167,7 @@ def main():
             
             if player_1 != '' and player_2 != '':
                 first_start = False
+                sleep(0.5)
         else:
             draw_board(screen)
             draw_markers(screen, position)
