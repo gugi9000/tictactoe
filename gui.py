@@ -1,5 +1,5 @@
 import pygame
-import random
+from random import choice
 from time import sleep
 
 spots_taken = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -180,11 +180,8 @@ def main():
             # draw the beautiful white ball cursor
             draw_cursor(screen, True, mouse_pos_x, mouse_pos_y)
             # chose a starting player at random
-            start_move = random.randint(0,1)
-            if start_move == 0:
-                turn = 'X'
-            elif start_move == 1:
-                turn = 'O'
+            turn = choice(['X','O'])
+
             # make sure everything was assigned correctly until we proceed to the actual game
             if player_1 != '' and player_2 != '':
                 first_start = False
