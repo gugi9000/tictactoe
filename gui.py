@@ -1,11 +1,25 @@
 import pygame
+import random
 from time import sleep
 
+spots_taken = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+board_pos = {
+        "pos_1": (130, 95),
+        "pos_2": (400, 95),
+        "pos_3": (670, 95),
+        "pos_4": (130, 300),
+        "pos_5": (400, 300),
+        "pos_6": (670, 300),
+        "pos_7": (130, 505),
+        "pos_8": (400, 505),
+        "pos_9": (670, 505)
+        }
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 BLUE =  ( 70,  70, 200)
 GREEN = (  0, 255,   0)
 RED =   (200,  30,  30)
+position = (0, 0)
 player_1 = ''
 player_2 = ''
 
@@ -35,7 +49,17 @@ def draw_board(screen):
 def draw_cursor(screen, active, x, y):
     pygame.draw.circle(screen, WHITE, [x, y], 10)
 
-def select_marker(mouse_x, mouse_y, first_start, font, screen):
+def draw_markers(screen, position):
+    global spots_taken
+    x, y = position
+    for i in range(len(spots_taken)):
+        if spots_taken[i] == 'X':  
+            draw_cross(screen, x, y)
+        elif spots_taken[i] == 'O':
+            draw_circle(screen, x, y)
+
+def input_system(mouse_x, mouse_y, first_start, player, screen):
+    global player_1, player_2, marker_spots, position
     if pygame.mouse.get_pressed()[0]:
         if first_start == True:
             # if mouse is within x region
@@ -43,17 +67,27 @@ def select_marker(mouse_x, mouse_y, first_start, font, screen):
                 if mouse_y >= 170 and mouse_y <= 330:
                     player_1 = 'X'
                     player_2 = 'O'
-                    marker_text = font.render(f"Player_1 is {player_1}, Player_2 is {player_2}", False, (0, 255, 0))
-                    screen.blit(marker_text, (220, 40))
             # if mouse is within o region
             if mouse_x >= 470 and mouse_x <= 630:
                 if mouse_y >= 170 and mouse_y <= 330:
                     player_1 = 'O'
                     player_2 = 'X'
-                    marker_text = font.render(f"Player_1 is {player_1}, Player_2 is {player_2}", False, (0, 255, 0))
-                    screen.blit(marker_text, (220, 40))
- 
-        # else game_board regions
+        else:
+            # if mouse is within first box region
+            if mouse_x >= 0 and mouse_x <= 267:
+                if mouse_y <= 200:
+                    spots_taken[0] = player
+                    position = board_pos["pos_1"]
+            # if mouse is within second box region
+            if mouse_x >= 287 and mouse_x <= 534:
+                if mouse_y <= 200:
+                    spots_taken[1] = player
+                    position = board_pos["pos_2"]
+            # if mouse is within third box region
+            if mouse_x >= 554:
+                if mouse_y <= 200:
+                    spots_taken[2] = player
+                    position = board_pos["pos_3"]
 # define a main function
 def main():
      
@@ -86,6 +120,7 @@ def main():
     
     running = True
     first_start = True
+    turn = 'X'
     while running:
         for event in pygame.event.get():
             
@@ -100,21 +135,26 @@ def main():
         screen.fill(BLACK)
         if first_start == True:
             screen.blit(marker_text, (220, 120))
-            select_marker(mouse_pos_x, mouse_pos_y, first_start, myfont, screen)
+            input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
             draw_cross(screen, 250, 250)
             draw_circle(screen, 550, 250)
             draw_cursor(screen, True, mouse_pos_x, mouse_pos_y)
             
             if player_1 != '' and player_2 != '':
                 first_start = False
-        #draw_board(screen)
-        mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
-        #draw_cross(screen, mouse_pos_x, mouse_pos_y)
-        #draw_circle(screen, mouse_pos_x, mouse_pos_y)
+        else:
+            draw_board(screen)
+            draw_markers(screen, position)
+            input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
+            # player_x's turn
+            if turn == 'X':
+               draw_cross(screen, mouse_pos_x, mouse_pos_y)
+            # player_o's turn
+            elif turn == 'O':
+                draw_circle(screen, mouse_pos_x, mouse_pos_y)
+            #milliseconds = clock.tick(FPS)
+            #print(milliseconds)
         pygame.display.flip()
-        #milliseconds = clock.tick(FPS)
-        #print(milliseconds)
-
     pygame.mouse.set_visible(True)
 if __name__=="__main__":
     main()
