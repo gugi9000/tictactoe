@@ -131,13 +131,7 @@ def main():
     # set screen size (x,y)
     screen_width = 800
     screen_height = 600
-    
-    xpos = 50
-    ypos = 50
-    step_x = 10
-    step_y = 10
-    FPS = 30
-
+        
     # create a main surface we can render stuff on
     screen = pygame.display.set_mode((screen_width,screen_height))
     # get the size of our main surface and create a sub surface
@@ -146,7 +140,6 @@ def main():
     background.fill(BLACK) 
     background = background.convert()
 
-    clock = pygame.time.Clock()
     pygame.mouse.set_visible(False)
 
     marker_text = myfont.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
