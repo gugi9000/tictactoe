@@ -131,9 +131,11 @@ def main():
     # set screen size (x,y)
     screen_width = 800
     screen_height = 600
+
+    fullscreen = False
         
     # create a main surface we can render stuff on
-    screen = pygame.display.set_mode((screen_width,screen_height))
+    screen = pygame.display.set_mode((screen_width,screen_height)) #, pygame.FULLSCREEN)
     # get the size of our main surface and create a sub surface
     background = pygame.Surface(screen.get_size())
     # set previous sub surface to color black and fill the whole surface
@@ -156,6 +158,13 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
+            if pygame.key.get_pressed()[pygame.K_F12]:
+                if fullscreen:
+                    fullscreen = False
+                    screen = pygame.display.set_mode((screen_width,screen_height), pygame.RESIZABLE)
+                else:
+                    fullscreen = True
+                    screen = pygame.display.set_mode((screen_width,screen_height), pygame.FULLSCREEN)
 
         # get mouse position (tuple unpacking)
         mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
