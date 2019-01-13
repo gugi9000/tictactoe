@@ -1,5 +1,6 @@
 import pygame
 from random import choice
+from time import sleep
 
 spots_taken = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 board_pos = {
@@ -184,6 +185,7 @@ def main():
             # make sure everything was assigned correctly until we proceed to the actual game
             if player_1 != '' and player_2 != '':
                 first_start = False
+                sleep(0.5)
         else:
             # draw our beautiful board
             draw_board(screen)
