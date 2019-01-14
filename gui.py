@@ -66,7 +66,7 @@ def draw_markers(screen, position):
         elif spots_taken[i] == 'O':
             draw_circle(screen, x, y)
 
-def input_system(mouse_x, mouse_y, first_start, player, screen):
+def input_system(mouse_x, mouse_y, first_start, player):
     global player_1, player_2, marker_spots, position
     # check if mouse1 is pressed
     if pygame.mouse.get_pressed()[0]:
@@ -120,12 +120,24 @@ def input_system(mouse_x, mouse_y, first_start, player, screen):
                     spots_taken[8] = player
                     position = board_pos["pos_9"]
 
+# toggle fullscreen (ON/OFF)
 def toggle_fullscreen(fullscreen):
     if fullscreen:
         screen = pygame.display.set_mode((screen_width,screen_height), pygame.RESIZABLE)
     else:
         screen = pygame.display.set_mode((screen_width,screen_height), pygame.FULLSCREEN)
     return not fullscreen
+
+# check if there's a winning play on the board
+def winner_check(spots_taken, player):
+    return ((spots_taken[0] == f"{player}" and spots_taken[1] == f"{player}" and spots_taken[2] == f"{player}") or
+    (spots_taken[3] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[5] == f"{player}") or
+    (spots_taken[6] == f"{player}" and spots_taken[7] == f"{player}" and spots_taken[8] == f"{player}") or
+    (spots_taken[0] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[8] == f"{player}") or
+    (spots_taken[2] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[6] == f"{player}") or
+    (spots_taken[0] == f"{player}" and spots_taken[3] == f"{player}" and spots_taken[6] == f"{player}") or
+    (spots_taken[1] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[7] == f"{player}") or
+    (spots_taken[2] == f"{player}" and spots_taken[5] == f"{player}" and spots_taken[8] == f"{player}")) 
 
 # define a main function
 def main():
@@ -176,7 +188,7 @@ def main():
             # render our starting screen text
             screen.blit(marker_text, (150, 120))
             # call the input system to know what we chose
-            input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
+            input_system(mouse_pos_x, mouse_pos_y, first_start, turn)
             # draw the cross option
             draw_cross(screen, 250, 250)
             # draw the circle option
@@ -196,13 +208,18 @@ def main():
             # draw the markers we set on screen
             draw_markers(screen, position)
             # call the input system to know what the do
-            input_system(mouse_pos_x, mouse_pos_y, first_start, turn, screen)
+            input_system(mouse_pos_x, mouse_pos_y, first_start, turn)
             # player_x's turn
             if turn == 'X':
-               draw_cross(screen, mouse_pos_x, mouse_pos_y)
+                draw_cross(screen, mouse_pos_x, mouse_pos_y)
+                #winner = winner_check(spots_taken, turn)
+                if winner_check(spots_taken, turn) == True:
+                   print("WINNER WINNER!")
             # player_o's turn
             elif turn == 'O':
                 draw_circle(screen, mouse_pos_x, mouse_pos_y)
+                if winner_check(spots_taken, turn) == True:
+                   print("WINNER WINNER!")
             #milliseconds = clock.tick(FPS)
             #print(milliseconds)
         pygame.display.flip()
