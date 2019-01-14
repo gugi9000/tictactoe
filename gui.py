@@ -299,22 +299,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
-
-# render our starting screen text
-            # screen.blit(marker_text, (150, 120))
-            # # call the input system to know what we chose
-            # input_system(mouse_pos_x, mouse_pos_y, first_start, turn)
-            # # draw the cross option
-            # draw_cross(screen, 250, 250)
-            # # draw the circle option
-            # draw_circle(screen, 550, 250)
-            # # draw the beautiful white ball cursor
-            # draw_cursor(screen, True, mouse_pos_x, mouse_pos_y)
-            # # chose a starting player at random
-            # turn = choice(['X','O'])
-
-            # # make sure everything was assigned correctly until we proceed to the actual game
-            # if player_1 != '' and player_2 != '':
-            #     first_start = False
-            #     sleep(0.5)
