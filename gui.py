@@ -27,33 +27,33 @@ player_2 = ''
 screen_width = 800
 screen_height = 600
 
+# draw game components
+def draw_cross(screen, x, y):
+    #  a    b
+    #    \/
+    #    /\
+    #  c   d
+    offset = 65
+    a = [x-offset,y-offset]
+    b = [x+offset,y-offset]
+    c = [x-offset,y+offset]
+    d = [x+offset,y+offset]
+    pygame.draw.line(screen, GREEN, a, d, 20)
+    pygame.draw.line(screen, GREEN, b, c, 20)
 
-####################draw game components###########################
-def draw_cross(screen, x, y):                                     #
-    #  a    b                                                     #
-    #    \/                                                       #
-    #    /\                                                       #
-    #  c   d                                                      #
-    offset = 65                                                   #
-    a = [x-offset,y-offset]                                       #
-    b = [x+offset,y-offset]                                       #
-    c = [x-offset,y+offset]                                       #
-    d = [x+offset,y+offset]                                       #
-    pygame.draw.line(screen, GREEN, a, d, 20)                     #
-    pygame.draw.line(screen, GREEN, b, c, 20)                     #
-                                                                  #
-def draw_circle(screen, x, y):                                    #
-    pygame.draw.circle(screen, RED, [x , y], 75, 14)              #
-                                                                  #
-def draw_board(screen):                                           #
-    pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)       #
-    pygame.draw.line(screen, BLUE, [534, 0],[534, 600], 20)       #
-    pygame.draw.line(screen, BLUE, [0, 200],[800, 200], 20)       #
-    pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)       #
-                                                                  #
-def draw_cursor(screen, active, x, y):                            #
-    pygame.draw.circle(screen, WHITE, [x, y], 10)                 #
-###################################################################
+def draw_circle(screen, x, y):
+    pygame.draw.circle(screen, RED, [x , y], 75, 14)
+
+def draw_board(screen):
+    global spots_taken
+    pygame.draw.line(screen, BLUE, [267, 0],[267, 600], 20)
+    pygame.draw.line(screen, BLUE, [534, 0],[534, 600], 20)
+    pygame.draw.line(screen, BLUE, [0, 200],[800, 200], 20)
+    pygame.draw.line(screen, BLUE, [0, 400],[800, 400], 20)
+
+def draw_cursor(screen, active, x, y):
+    pygame.draw.circle(screen, WHITE, [x, y], 10)
+
 def draw_markers(screen, position):
     global spots_taken
     x, y = position
@@ -85,40 +85,67 @@ def input_system(mouse_x, mouse_y, first_start, player):
             # check if mouse is within any box region
             if mouse_x <= 267:
                 if mouse_y <= 200:
-                    spots_taken[0] = player
-                    position = board_pos["pos_1"]
+                    if spots_taken[0] != 1:
+                        return False
+                    else:
+                        spots_taken[0] = player
+                        position = board_pos["pos_1"]
             if mouse_x >= 287 and mouse_x <= 534:
                 if mouse_y <= 200:
-                    spots_taken[1] = player
-                    position = board_pos["pos_2"]
+                    if spots_taken[1] != 2:
+                        return False
+                    else:
+                        spots_taken[1] = player
+                        position = board_pos["pos_2"]
             if mouse_x >= 554:
                 if mouse_y <= 200:
-                    spots_taken[2] = player
-                    position = board_pos["pos_3"]
+                    if spots_taken[2] != 3:
+                        return False
+                    else:
+                        spots_taken[2] = player
+                        position = board_pos["pos_3"]
             if mouse_x <= 267:
                 if mouse_y >= 220 and mouse_y <= 400:
-                    spots_taken[3] = player
-                    position = board_pos["pos_4"]
+                    if spots_taken[3] != 4:
+                        return False
+                    else:
+                        spots_taken[3] = player
+                        position = board_pos["pos_4"]
             if mouse_x >= 287 and mouse_x <= 534:
                 if mouse_y >= 220 and mouse_y <= 400:
-                    spots_taken[4] = player
-                    position = board_pos["pos_5"]
+                    if spots_taken[4] != 5:
+                        return False
+                    else:
+                        spots_taken[4] = player
+                        position = board_pos["pos_5"]
             if mouse_x >= 554:
                 if mouse_y >= 220 and mouse_y <= 400:
-                    spots_taken[5] = player
-                    position = board_pos["pos_6"]
+                    if spots_taken[5] != 6:
+                        return False
+                    else:
+                        spots_taken[5] = player
+                        position = board_pos["pos_6"]
             if mouse_x <= 267:
                 if mouse_y >= 420:
-                    spots_taken[6] = player
-                    position = board_pos["pos_7"]
+                    if spots_taken[6] != 7:
+                        return False
+                    else:
+                        spots_taken[6] = player
+                        position = board_pos["pos_7"]
             if mouse_x >= 287 and mouse_x <= 534:
                 if mouse_y >= 420:
-                    spots_taken[7] = player
-                    position = board_pos["pos_8"]
+                    if spots_taken[7] != 8:
+                        return False
+                    else:
+                        spots_taken[7] = player
+                        position = board_pos["pos_8"]
             if mouse_x >= 554:
                 if mouse_y >= 420:
-                    spots_taken[8] = player
-                    position = board_pos["pos_9"]
+                    if spots_taken[8] != 9:
+                        return False
+                    else:
+                        spots_taken[8] = player
+                        position = board_pos["pos_9"]
 
 # toggle fullscreen (ON/OFF)
 def toggle_fullscreen(fullscreen):
@@ -137,7 +164,7 @@ def winner_check(spots_taken, player):
     (spots_taken[2] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[6] == f"{player}") or
     (spots_taken[0] == f"{player}" and spots_taken[3] == f"{player}" and spots_taken[6] == f"{player}") or
     (spots_taken[1] == f"{player}" and spots_taken[4] == f"{player}" and spots_taken[7] == f"{player}") or
-    (spots_taken[2] == f"{player}" and spots_taken[5] == f"{player}" and spots_taken[8] == f"{player}")) 
+    (spots_taken[2] == f"{player}" and spots_taken[5] == f"{player}" and spots_taken[8] == f"{player}"))
 
 # define a main function
 def main():
