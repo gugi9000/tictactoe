@@ -191,7 +191,6 @@ def main():
     pygame.mouse.set_visible(False)
 
     marker_text = myfont.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
-
     # cool variable we all love    
     running = True
     first_start = True
@@ -241,14 +240,14 @@ def main():
                 draw_cross(screen, mouse_pos_x, mouse_pos_y)
                 #winner = winner_check(spots_taken, turn)
                 if winner_check(spots_taken, turn) == True:
-                   print("WINNER WINNER!")
+                    winner_text = myfont.render(f"{turn} IS THE WINNER", True, (0, 255, 0))
+                    screen.blit(winner_text, (screen_width / 2 - 140, screen_height / 2))
             # player_o's turn
             elif turn == 'O':
                 draw_circle(screen, mouse_pos_x, mouse_pos_y)
                 if winner_check(spots_taken, turn) == True:
-                   print("WINNER WINNER!")
-            #milliseconds = clock.tick(FPS)
-            #print(milliseconds)
+                    winner_text = myfont.render(f"{turn} IS THE WINNER", True, (255, 0, 0))
+                    screen.blit(winner_text, (screen_width / 2 - 140, screen_height / 2))
         pygame.display.flip()
     pygame.mouse.set_visible(True)
 
