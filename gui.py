@@ -199,7 +199,7 @@ def main():
     logo = pygame.image.load("logo32x32.png")
     pygame.display.set_icon(logo)
     # set window title
-    pygame.display.set_caption("TicTaToe by Frosty and Patience")
+    pygame.display.set_caption("Tic-Tac-Toe by Frosty and Patience")
     # create a font for text stuff in the program
     myfont = pygame.font.SysFont("Comic Sans MS", 30, 1)
         
