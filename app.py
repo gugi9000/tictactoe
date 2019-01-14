@@ -31,26 +31,11 @@ def alike(a, b, c):
 	return a == b and b == c
 
 def winner(board):
-	if alike(board[0], board[1], board[2]):
-		return (board[0])
-	elif alike(board[3], board[4], board[5]):
-		return (board[3])
-	elif alike(board[6], board[7], board[8]):
-		return (board[6])
-	elif alike(board[0], board[4], board[8]):
-		return (board[0])
-	elif alike(board[0], board[3], board[6]):
-		return (board[0])
-	elif alike(board[1], board[4], board[7]):
-		return (board[1])
-	elif alike(board[2], board[5], board[8]):
-		return (board[8])
-	elif alike(board[0], board[3], board[6]):
-		return (board[0])
-	elif alike(board[6], board[4], board[2]):
-		return (board[2])
-	else:
-		return False
+	win_cases = [(1,2,3),(4,5,6),(7,8,9),(1,4,7),(2,5,8),(3,6,9),(1,5,9),(3,5,7)]
+	for item in win_cases:
+		if alike(board[item[0]-1], board[item[1]-1], board[item[2]-1]):
+			return True
+	return False
 
 				
 def available(board, piece, placement):
