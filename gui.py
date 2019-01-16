@@ -24,6 +24,7 @@ player_1 = ''
 player_2 = ''
 localgame = False
 multiplayer = False
+player_turn = 'X'
 
 # set screen size (x,y)
 screen_width = 800
@@ -41,6 +42,31 @@ def main_menu(screen):
 	pygame.draw.line(screen, BLUE, [300, 430],[500, 430], 10)
 	pygame.draw.line(screen, BLUE, [300, 330],[300, 430], 10)
 	pygame.draw.line(screen, BLUE, [500, 330],[500, 430], 10)
+
+class BoardMarkers:
+	global GREEN, RED
+
+	def __init__(self, screen, player, x, y):
+		self.screen = screen
+		self.player = player
+		self.x = x
+		self.y = y
+	
+	def draw_marker(self):
+		if self.player == 'X':
+			#  a    b
+			#    \/
+			#    /\
+			#  c   d
+			offset = 65
+			a = [self.x-offset,self.y-offset]
+			b = [self.x+offset,self.y-offset]
+			c = [self.x-offset,self.y+offset]
+			d = [self.x+offset,self.y+offset]
+			pygame.draw.line(self.screen, GREEN, a, d, 20)
+			pygame.draw.line(self.screen, GREEN, b, c, 20)
+		elif self.player == 'O':
+			pygame.draw.circle(self.screen, RED, [self.x , self.y], 75, 14)
 
 # draw game components
 def draw_cross(screen, x, y):
@@ -80,10 +106,18 @@ def draw_markers(screen, position):
 		elif spots_taken[i] == 'O':
 			draw_circle(screen, x, y)
 
-def input_system(mouse_x, mouse_y, first_start, player, choose_marker):
-	global player_1, player_2, marker_spots, position, localgame, multiplayer
+def switch_turn():
+	global player_turn
+	if player_turn == 'X':
+		player_turn = 'O'
+	elif player_turn == 'O':
+		player_turn = 'X'
+
+def input_system(mouse_x, mouse_y, first_start, player, choose_marker, screen):
+	global player_1, player_2, marker_spots, position, localgame, multiplayer, cur_round, last_round
 	# check if mouse1 is pressed
-	if pygame.mouse.get_pressed()[0]:
+	if pygame.mouse.get_pressed()[0] == True:
+		print("Mouse is clicked")
 		if first_start == True:
 			# if mouse is within local game region
 			if mouse_x >= 300 and mouse_x <= 500:
@@ -114,6 +148,9 @@ def input_system(mouse_x, mouse_y, first_start, player, choose_marker):
 						else:
 							spots_taken[0] = player
 							position = board_pos["pos_1"]
+							x, y = position
+							mark_pos_1 = BoardMarkers(screen, player, x, y)
+							mark_pos_1.draw_marker()
 				if mouse_x >= 287 and mouse_x <= 534:
 					if mouse_y <= 200:
 						if spots_taken[1] != 2:
@@ -121,6 +158,9 @@ def input_system(mouse_x, mouse_y, first_start, player, choose_marker):
 						else:
 							spots_taken[1] = player
 							position = board_pos["pos_2"]
+							x, y = position
+							mark_pos_2 = BoardMarkers(screen, player, x, y)
+							mark_pos_2.draw_marker()
 				if mouse_x >= 554:
 					if mouse_y <= 200:
 						if spots_taken[2] != 3:
@@ -170,6 +210,9 @@ def input_system(mouse_x, mouse_y, first_start, player, choose_marker):
 						else:
 							spots_taken[8] = player
 							position = board_pos["pos_9"]
+				
+				if winner_check(spots_taken) == False:
+					switch_turn()
 
 # toggle fullscreen (ON/OFF)
 def toggle_fullscreen(fullscreen):
@@ -193,9 +236,11 @@ def winner_check(spots_taken):
 	return False
 
 
+
+
 # define a main function
 def main():
-	 
+	global player_turn
 	# initialize the pygame module
 	pygame.init()
 	# load and set the logo
@@ -227,7 +272,6 @@ def main():
 	running = True
 	choose_marker = False
 	first_start = True
-	turn = 'X'
 	# our game loop
 	while running:
 		# check if any events are happening and if
@@ -249,7 +293,7 @@ def main():
 			screen.blit(localgame_text, (320, 225))
 			screen.blit(multiplayer_text, (320, 355))
 			draw_cursor(screen, mouse_pos_x, mouse_pos_y)
-			input_system(mouse_pos_x, mouse_pos_y, first_start, turn, choose_marker)
+			input_system(mouse_pos_x, mouse_pos_y, first_start, player_turn, choose_marker, screen)
 
 			if localgame == True or multiplayer == True:
 				first_start = False
@@ -260,7 +304,7 @@ def main():
 					# render our starting screen text
 					screen.blit(marker_text, (150, 120))
 					# call the input system to know what we chose
-					input_system(mouse_pos_x, mouse_pos_y, first_start, turn, choose_marker)
+					input_system(mouse_pos_x, mouse_pos_y, first_start, player_turn, choose_marker, screen)
 					# draw the cross option
 					draw_cross(screen, 250, 250)
 					# draw the circle option
@@ -268,7 +312,7 @@ def main():
 					# draw the beautiful white ball cursor
 					draw_cursor(screen, mouse_pos_x, mouse_pos_y)
 					# chose a starting player at random
-					turn = choice(['X','O'])
+					player_turn = choice(['X','O'])
 
 					# make sure everything was assigned correctly until we proceed to the actual game
 					if player_1 != '' and player_2 != '':
@@ -279,21 +323,23 @@ def main():
 					# draw our beautiful board
 					draw_board(screen)
 					# draw the markers we set on screen
-					draw_markers(screen, position)
+					# draw_markers(screen, position)
 					# call the input system to know what the do
-					input_system(mouse_pos_x, mouse_pos_y, first_start, turn, choose_marker)
+					input_system(mouse_pos_x, mouse_pos_y, first_start, player_turn, choose_marker, screen)
+				
 					# player_x's turn
-					if turn == 'X':
+					if player_turn == 'X':
 						draw_cross(screen, mouse_pos_x, mouse_pos_y)
-						#winner = winner_check(spots_taken, turn)
+						#print(spots_taken)
 						if winner_check(spots_taken) == True:
-							winner_text = myfont.render(f"{turn} IS THE WINNER", True, (0, 255, 0))
+							winner_text = myfont.render(f"{player_turn} IS THE WINNER", True, (0, 255, 0))
 							screen.blit(winner_text, (screen_width / 2 - 140, screen_height / 2))
 					# player_o's turn
-					elif turn == 'O':
+					elif player_turn == 'O':
 						draw_circle(screen, mouse_pos_x, mouse_pos_y)
+						#print(spots_taken)
 						if winner_check(spots_taken) == True:
-							winner_text = myfont.render(f"{turn} IS THE WINNER", True, (255, 0, 0))
+							winner_text = myfont.render(f"{player_turn} IS THE WINNER", True, (255, 0, 0))
 							screen.blit(winner_text, (screen_width / 2 - 140, screen_height / 2))
 			# else if multiplayer we do somme magic stuff
 			# with packets and stuff. Omagawd
