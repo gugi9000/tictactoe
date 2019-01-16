@@ -43,31 +43,6 @@ def main_menu(screen):
 	pygame.draw.line(screen, BLUE, [300, 330],[300, 430], 10)
 	pygame.draw.line(screen, BLUE, [500, 330],[500, 430], 10)
 
-class BoardMarkers:
-	global GREEN, RED
-
-	def __init__(self, screen, player, x, y):
-		self.screen = screen
-		self.player = player
-		self.x = x
-		self.y = y
-	
-	def draw_marker(self):
-		if self.player == 'X':
-			#  a    b
-			#    \/
-			#    /\
-			#  c   d
-			offset = 65
-			a = [self.x-offset,self.y-offset]
-			b = [self.x+offset,self.y-offset]
-			c = [self.x-offset,self.y+offset]
-			d = [self.x+offset,self.y+offset]
-			pygame.draw.line(self.screen, GREEN, a, d, 20)
-			pygame.draw.line(self.screen, GREEN, b, c, 20)
-		elif self.player == 'O':
-			pygame.draw.circle(self.screen, RED, [self.x , self.y], 75, 14)
-
 # draw game components
 def draw_cross(screen, x, y):
 	#  a    b
@@ -148,9 +123,6 @@ def input_system(mouse_x, mouse_y, first_start, player, choose_marker, screen):
 						else:
 							spots_taken[0] = player
 							position = board_pos["pos_1"]
-							x, y = position
-							mark_pos_1 = BoardMarkers(screen, player, x, y)
-							mark_pos_1.draw_marker()
 				if mouse_x >= 287 and mouse_x <= 534:
 					if mouse_y <= 200:
 						if spots_taken[1] != 2:
@@ -158,9 +130,6 @@ def input_system(mouse_x, mouse_y, first_start, player, choose_marker, screen):
 						else:
 							spots_taken[1] = player
 							position = board_pos["pos_2"]
-							x, y = position
-							mark_pos_2 = BoardMarkers(screen, player, x, y)
-							mark_pos_2.draw_marker()
 				if mouse_x >= 554:
 					if mouse_y <= 200:
 						if spots_taken[2] != 3:
