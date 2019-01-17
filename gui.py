@@ -34,16 +34,9 @@ screen_height = 600
 # draw main menu
 def main_menu(screen):
     # localgame box
-    pygame.draw.line(screen, BLUE, [300, 200], [500, 200], 10)
-    pygame.draw.line(screen, BLUE, [300, 300], [500, 300], 10)
-    pygame.draw.line(screen, BLUE, [300, 200], [300, 300], 10)
-    pygame.draw.line(screen, BLUE, [500, 200], [500, 300], 10)
+    pygame.draw.polygon(screen, BLUE, ([300, 200], [500, 200], [500, 300], [300, 300]), 10  )
     # multiplayer box
-    pygame.draw.line(screen, BLUE, [300, 330], [500, 330], 10)
-    pygame.draw.line(screen, BLUE, [300, 430], [500, 430], 10)
-    pygame.draw.line(screen, BLUE, [300, 330], [300, 430], 10)
-    pygame.draw.line(screen, BLUE, [500, 330], [500, 430], 10)
-
+    pygame.draw.polygon(screen, BLUE, ([300, 330], [500, 330], [500, 430], [300, 430]), 10  )
 
 # draw game components
 def draw_cross(screen, x, y):
