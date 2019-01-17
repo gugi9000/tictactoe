@@ -14,6 +14,15 @@ board_pos = {
 		"pos_8": (400, 505),
 		"pos_9": (670, 505)
 		}
+
+# this might seem strange, but let's pretend to dict was a bad idea
+# and that I don't feel like making a case for deleting it yet.
+
+positions = []
+for _ in board_pos.values():
+    positions.append(_)
+
+
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 BLUE =  ( 70,  70, 200)
@@ -295,7 +304,16 @@ def main():
 					# draw_markers(screen, position)
 					# call the input system to know what the do
 					input_system(mouse_pos_x, mouse_pos_y, first_start, player_turn, choose_marker, screen)
-				
+					
+					for i, _ in enumerate(spots_taken):
+						if _ == 'X':
+							x, y = positions[i]
+							draw_cross(screen, x, y)
+						elif _ == 'O':
+							# draw an... yeah O
+							x, y = positions[i]
+							draw_circle(screen, x, y)
+						 
 					# player_x's turn
 					if player_turn == 'X':
 						draw_cross(screen, mouse_pos_x, mouse_pos_y)
