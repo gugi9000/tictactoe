@@ -16,6 +16,7 @@ board_pos = {
 } 
 
 BLACK = (0, 0, 0)
+YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLUE = (70, 70, 200)
 GREEN = (0, 255, 0)
@@ -230,22 +231,27 @@ def winner_check(spots_taken):
 # define a main function
 def main():
 	global player_turn
+	
 	# initialize the pygame module
 	pygame.init()
+	
 	# load and set the logo
 	logo = pygame.image.load("logo32x32.png")
 	pygame.display.set_icon(logo)
+	
 	# set window title
 	pygame.display.set_caption("Tic-Tac-Toe by Frosty and Patience")
+	
 	# create a font for text stuff in the program
-	myfont = pygame.font.SysFont("Comic Sans MS", 30, 1)
+	my_font = pygame.font.SysFont("Comic Sans MS", 30, 1)
+	my_large_font = pygame.font.SysFont("Comic Sans MS", 100, 1)
 
 	# create a main surface we can render stuff on
-	screen = pygame.display.set_mode(
-		(screen_width, screen_height)
-	)  # , pygame.FULLSCREEN)
+	screen = pygame.display.set_mode((screen_width, screen_height))
+	
 	# get the size of our main surface and create a sub surface
 	background = pygame.Surface(screen.get_size())
+	
 	# set previous sub surface to color black and fill the whole surface
 	background.fill(BLACK)
 	background = background.convert()
@@ -253,16 +259,18 @@ def main():
 
 	pygame.mouse.set_visible(False)
 
-	marker_text = myfont.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
+	marker_text = my_font.render(f"PLAYER 1, CHOSE YOUR MARKER", False, (0, 255, 0))
 
 	# main menu texts
-	main_menu_title = myfont.render("MAIN MENU", False, (255, 255, 255))
-	localgame_text = myfont.render("Local Game", False, (255, 255, 255))
-	multiplayer_text = myfont.render("Multiplayer", False, (255, 255, 255))
+	main_menu_title = my_font.render("MAIN MENU", False, (255, 255, 255))
+	localgame_text = my_font.render("Local Game", False, (255, 255, 255))
+	multiplayer_text = my_font.render("Multiplayer", False, (255, 255, 255))
 	# cool variable we all love
 	running = True
 	choose_marker = False
 	first_start = True
+	game_over = False
+
 	# our game loop
 	while running:
 		# check if any events are happening and if
@@ -330,14 +338,15 @@ def main():
 					# draw the markers we set on screen
 					# draw_markers(screen, position)
 					# call the input system to know what the do
-					input_system(
-						mouse_pos_x,
-						mouse_pos_y,
-						first_start,
-						player_turn,
-						choose_marker,
-						screen,
-					)
+					if not game_over:
+						input_system(
+							mouse_pos_x,
+							mouse_pos_y,
+							first_start,
+							player_turn,
+							choose_marker,
+							screen,
+						)
 
 					for i, _ in enumerate(board_pos):
 						if spots_taken[i] == "X":
@@ -346,45 +355,25 @@ def main():
 						elif spots_taken[i] == "O":
 							x, y = board_pos[_]
 							draw_circle(screen, x, y)
+					
+					if winner_check(spots_taken):
+						winner_text = my_large_font.render(f"{player_turn} IS THE WINNER", True, (YELLOW))
+						screen.blit( winner_text, (80, screen_height / 2) )
+						game_over = True
+					elif is_tie(spots_taken):
+						tie_text = my_large_font.render("IT'S A TIE", True, (YELLOW))
+						screen.blit(tie_text, (200, screen_height / 2))
+						game_over = True
 
 							# player_x's turn
 					if player_turn == "X":
 						draw_cross(screen, mouse_pos_x, mouse_pos_y)
-						# print(spots_taken)
-						if is_tie(spots_taken) == True and not winner_check(spots_taken):
-							tie_text = myfont.render(
-								"IT'S A TIE", True, (0, 0, 255)
-							)
-							screen.blit(
-								tie_text, (screen_width / 2 - 140, screen_height / 2)
-							)
-						if winner_check(spots_taken) == True:
-							winner_text = myfont.render(
-								f"{player_turn} IS THE WINNER", True, (0, 255, 0)
-							)
-							screen.blit(
-								winner_text, (screen_width / 2 - 100, screen_height / 2)
-							)
+							
 							# player_o's turn
 					elif player_turn == "O":
 						draw_circle(screen, mouse_pos_x, mouse_pos_y)
 						# print(spots_taken)
-						if is_tie(spots_taken) == True and not winner_check(spots_taken):
-							tie_text = myfont.render(
-								f"IT'S A TIE", True, (0, 0, 255)
-							)
-							screen.blit(
-								tie_text, (screen_width / 2 - 100, screen_height / 2)
-							)
-						if winner_check(spots_taken) == True:
-							winner_text = myfont.render(
-								f"{player_turn} IS THE WINNER", True, (255, 0, 0)
-							)
-							screen.blit(
-								winner_text, (screen_width / 2 - 140, screen_height / 2)
-							)
-							# else if multiplayer we do somme magic stuff
-							# with packets and stuff. Omagawd
+
 		pygame.display.flip()
 	pygame.mouse.set_visible(True)
 

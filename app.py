@@ -32,7 +32,7 @@ def winner(board):
     return False
 
 
-def available(board, piece, placement):
+def available(board, placement):
     if placement < 0 or placement > 9:
         return False
     else:
@@ -55,7 +55,7 @@ while True:
     move = input(f"Where do you want to place {player}? ")
     if is_int(move):
         move = int(move) - 1 
-        if available(board, player, move):
+        if available(board, move):
             board[int(move)] = player
             turns = turns + 1
         if winner(board):
