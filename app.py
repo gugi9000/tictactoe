@@ -10,7 +10,7 @@ def clear():
 
 def draw_board(board):
     for x in range(0, len(board)):
-        if ((x + 1) % 3) != 0:
+        if (x + 1) % 3 != 0:
             print(board[x], end=" ")
         else:
             print(board[x])
