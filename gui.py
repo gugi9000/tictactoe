@@ -239,7 +239,6 @@ def winner_check(spots_taken):
 # define a main function
 def main():
     global player_turn
-
     # initialize the pygame module
     pygame.init()
 
@@ -287,6 +286,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
+                pygame.mouse.set_visible(True)
+                quit()
             if pygame.key.get_pressed()[pygame.K_F12]:
                 fullscreen = toggle_fullscreen(fullscreen)
 
@@ -343,19 +344,8 @@ def main():
                 else:
                     # draw our beautiful board
                     draw_board(screen)
-                    # draw the markers we set on screen
-                    # draw_markers(screen, position)
-                    # call the input system to know what the do
-                    if not game_over:
-                        input_system(
-                            mouse_pos_x,
-                            mouse_pos_y,
-                            first_start,
-                            player_turn,
-                            choose_marker,
-                            screen,
-                        )
 
+                    # draw the markers we set on screen
                     for i, _ in enumerate(board_pos):
                         if spots_taken[i] == "X":
                             x, y = board_pos[_]
@@ -375,17 +365,36 @@ def main():
                         screen.blit(tie_text, (200, screen_height / 2))
                         game_over = True
 
-                        # player_x's turn
-                    if player_turn == "X":
-                        draw_cross(screen, mouse_pos_x, mouse_pos_y)
 
-                        # player_o's turn
-                    elif player_turn == "O":
-                        draw_circle(screen, mouse_pos_x, mouse_pos_y)
-                        # print(spots_taken)
+                    if not game_over:
+                            # player_x's turn
+                        if player_turn == "X":
+                            draw_cross(screen, mouse_pos_x, mouse_pos_y)
 
+                            # player_o's turn
+                        elif player_turn == "O":
+                            draw_circle(screen, mouse_pos_x, mouse_pos_y)
+                            # print(spots_taken)
+                        
+                        # call the input system to know what the do
+                        input_system(
+                            mouse_pos_x,
+                            mouse_pos_y,
+                            first_start,
+                            player_turn,
+                            choose_marker,
+                            screen,
+                        )
+                    else:
+                        pygame.draw.rect(screen, BLUE, ([300, 450], [200, 100]), 10)
+                        back_text = my_font.render("QUIT", True, (WHITE))
+                        screen.blit(back_text, (350, 500 ))
+                        draw_cursor(screen, mouse_pos_x, mouse_pos_y)
+                        if pygame.mouse.get_pressed()[0]:
+                            if mouse_pos_x >= 287 and mouse_pos_x <= 534 and mouse_pos_y >= 420:
+                                quit()
         pygame.display.flip()
-    pygame.mouse.set_visible(True)
+    
 
 
 if __name__ == "__main__":
