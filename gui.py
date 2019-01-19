@@ -295,7 +295,7 @@ def main():
         mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos()
         # fill the screen with black
         screen.fill(BLACK)
-        if first_start == True:
+        if first_start:
             main_menu(screen)
             screen.blit(main_menu_title, (305, 125))
             screen.blit(localgame_text, (320, 225))
@@ -310,12 +310,12 @@ def main():
                 screen,
             )
 
-            if localgame == True or multiplayer == True:
+            if localgame or multiplayer:
                 first_start = False
                 choose_marker = True
         else:
-            if localgame == True:
-                if choose_marker == True:
+            if localgame:
+                if choose_marker:
                     # render our starting screen text
                     screen.blit(marker_text, (150, 120))
                     # call the input system to know what we chose
@@ -395,7 +395,6 @@ def main():
                                 quit()
         pygame.display.flip()
     
-
 
 if __name__ == "__main__":
     main()
