@@ -16,14 +16,6 @@ def draw_board(board):
             print(board[x])
 
 
-def is_int(input):
-    try:
-        _ = int(input)
-    except ValueError:
-        return False
-    return True
-
-
 def winner(board):
     win_cases = [ (1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7), ]
     for item in win_cases:
@@ -53,7 +45,7 @@ while True:
     clear()
     draw_board(board)
     move = input(f"Where do you want to place {player}? ")
-    if is_int(move):
+    if move.isdigit():
         move = int(move) - 1 
         if available(board, move):
             board[int(move)] = player
