@@ -2,45 +2,48 @@ from os import system, name
 
 
 def draw_board(board):
-    for x in range(0, len(board)):
-        if (x + 1) % 3 != 0:
-            print(board[x], end=" ")
-        else:
-            print(board[x])
+    for line in board:
+        for piece in line:
+            print(piece, end=" ")
+        print()
 
 
-def winner(board):
-    win_cases = [
-        (1, 2, 3),
-        (4, 5, 6),
-        (7, 8, 9),
-        (1, 4, 7),
-        (2, 5, 8),
-        (3, 6, 9),
-        (1, 5, 9),
-        (3, 5, 7),
-    ]
-    for item in win_cases:
-        if (
-            board[item[0] - 1] == board[item[1] - 1]
-            and board[item[1] - 1] == board[item[2] - 1]
-        ):
+def winner(board, dim=3):
+    for line in board:
+        if len(set(line)) == 1:
             return True
+    for x in range(
+        dim
+    ):  # FIXME: this part does not consider board size in both dimensions
+        if board[0][x] == board[1][x] and board[1][x] == board[2][x]:
+            return True
+    if len(set([board[i][j] for i, j in enumerate(range(dim - 1, -1, -1))])) == 1:
+        return True
+    if len(set([board[i][i] for i in range(dim)])) == 1:
+        return True
     return False
 
 
-def available(board, placement):
+def pos_from_move(move, dim=3):
+    if move < dim:
+        return (0, move)
+    return (move // dim, move % dim)
+
+
+def play(board, placement, turns):
     if placement < 0 or placement > 9:
-        return False
+        return turns
     else:
-        if board[placement] == "X" or board[placement] == "O":
-            return False
+        x, y = pos_from_move(placement)
+        if board[x][y] == "X" or board[x][y] == "O":
+            return turns
         else:
-            return True
+            board[x][y] = player  # FIXME: How is the global board affected?
+            return turns + 1
 
 
 player = "X"
-board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 turns = 0
 while True:
     if turns == 9:
@@ -52,15 +55,10 @@ while True:
     move = input(f"Where do you want to place {player}? ")
     if move.isdigit():
         move = int(move) - 1
-        if available(board, move):
-            board[int(move)] = player
-            turns = turns + 1
+        turns = play(board, move, turns)
         if winner(board):
             print(f"Player {player} is the winner")
-            draw_board(board)
             break
-        if player == "X":
-            player = "O"
-        else:
-            player = "X"
+        player = "O" if player == "X" else "X"
+draw_board(board)
 print("Bye..")
