@@ -1,13 +1,6 @@
 from os import system, name
 
 
-def clear():
-    if name == "nt":
-        _ = system("cls")
-    else:
-        _ = system("clear")
-
-
 def draw_board(board):
     for x in range(0, len(board)):
         if (x + 1) % 3 != 0:
@@ -17,9 +10,13 @@ def draw_board(board):
 
 
 def winner(board):
-    win_cases = [ (1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7), ]
+    win_cases = [ (1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8),
+                (3, 6, 9), (1, 5, 9), (3, 5, 7), ]
     for item in win_cases:
-        if board[item[0] - 1] == board[item[1] - 1] and board[item[1] - 1] == board[item[2] - 1]:
+        if (
+            board[item[0] - 1] == board[item[1] - 1]
+            and board[item[1] - 1] == board[item[2] - 1]
+        ):
             return True
     return False
 
@@ -42,11 +39,11 @@ while True:
         print(f"Turns out there are no available spots left.")
         print(f"Game has tied.")
         break
-    clear()
+    system("cls" if name == "nt" else "clear")
     draw_board(board)
     move = input(f"Where do you want to place {player}? ")
     if move.isdigit():
-        move = int(move) - 1 
+        move = int(move) - 1
         if available(board, move):
             board[int(move)] = player
             turns = turns + 1
