@@ -10,8 +10,16 @@ def draw_board(board):
 
 
 def winner(board):
-    win_cases = [ (1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8),
-                (3, 6, 9), (1, 5, 9), (3, 5, 7), ]
+    win_cases = [
+        (1, 2, 3),
+        (4, 5, 6),
+        (7, 8, 9),
+        (1, 4, 7),
+        (2, 5, 8),
+        (3, 6, 9),
+        (1, 5, 9),
+        (3, 5, 7),
+    ]
     for item in win_cases:
         if (
             board[item[0] - 1] == board[item[1] - 1]
