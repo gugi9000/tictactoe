@@ -2,8 +2,8 @@ from os import system, name
 
 
 def draw_board(board):
-    for line in board:
-        for piece in line:
+    for line in board:  # FIXME: This should print pretty with
+        for piece in line:  # FIXME: varied length numbers
             print(piece, end=" ")
         print()
 
@@ -12,10 +12,8 @@ def winner(board, dim=3):
     for line in board:
         if len(set(line)) == 1:
             return True
-    for x in range(
-        dim
-    ):  # FIXME: this part does not consider board size in both dimensions
-        if board[0][x] == board[1][x] and board[1][x] == board[2][x]:
+    for x in range(dim):
+        if len(set(([board[y][x] for y in range(dim)]))) == 1:
             return True
     if len(set([board[i][j] for i, j in enumerate(range(dim - 1, -1, -1))])) == 1:
         return True
@@ -31,7 +29,7 @@ def pos_from_move(move, dim=3):
 
 
 def play(board, placement, turns):
-    if placement < 0 or placement > 9:
+    if placement < 0 or placement > 9:  # FIXME: This doesn't care about dimensions
         return turns
     else:
         x, y = pos_from_move(placement)
@@ -43,10 +41,10 @@ def play(board, placement, turns):
 
 
 player = "X"
-board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]  # FIXME: This should care about dimensions
 turns = 0
 while True:
-    if turns == 9:
+    if turns == len(board) * len(board):
         print(f"Turns out there are no available spots left.")
         print(f"Game has tied.")
         break
