@@ -29,7 +29,7 @@ def pos_from_move(move, dim=3):
 
 
 def play(board, placement, turns):
-    if placement < 0 or placement > 9:  # FIXME: This doesn't care about dimensions
+    if placement < 0 or placement > dim * dim:
         return turns
     else:
         x, y = pos_from_move(placement)
@@ -41,10 +41,11 @@ def play(board, placement, turns):
 
 
 player = "X"
-board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]  # FIXME: This should care about dimensions
+dim = 3
+board = list(map(list, zip(*[iter([x for x in range(1, dim * dim + 1)])] * dim)))
 turns = 0
 while True:
-    if turns == len(board) * len(board):
+    if turns == dim * dim:
         print(f"Turns out there are no available spots left.")
         print(f"Game has tied.")
         break
@@ -52,8 +53,7 @@ while True:
     draw_board(board)
     move = input(f"Where do you want to place {player}? ")
     if move.isdigit():
-        move = int(move) - 1
-        turns = play(board, move, turns)
+        turns = play(board, int(move) - 1, turns)
         if winner(board):
             print(f"Player {player} is the winner")
             break
