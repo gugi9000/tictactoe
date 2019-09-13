@@ -2,9 +2,9 @@ from os import system, name
 
 
 def draw_board(board):
-    for line in board:  # FIXME: This should print pretty with
-        for piece in line:  # FIXME: varied length numbers
-            print(piece, end=" ")
+    for line in board:
+        for piece in line:
+            print("{:^6}".format(piece), end="")
         print()
 
 
