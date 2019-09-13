@@ -36,7 +36,7 @@ def play(board, placement, turns):
         if board[x][y] == "X" or board[x][y] == "O":
             return turns
         else:
-            board[x][y] = player  # FIXME: How is the global board affected?
+            board[x][y] = player
             return turns + 1
 
 
